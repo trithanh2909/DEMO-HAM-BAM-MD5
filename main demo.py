@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 
-
+import hashlib  # Chỉ dùng trong self_test(), không dùng trong lõi MD5.
+import hmac
+import math
+import struct
+import sys
+import tempfile
+from pathlib import Path
+from typing import Any
 
 # ============================================================================
 # PHẦN 1. HẰNG SỐ VÀ CÁC PHÉP TOÁN CƠ BẢN CỦA MD5
