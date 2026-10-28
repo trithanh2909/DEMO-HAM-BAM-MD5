@@ -24,7 +24,6 @@ from typing import Any
 
 _MASK32 = 0xFFFFFFFF
 
-# Lịch xoay trái: 4 vòng, mỗi vòng 16 bước.
 _SHIFT = (
     [7, 12, 17, 22] * 4
     + [5, 9, 14, 20] * 4
