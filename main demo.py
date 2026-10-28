@@ -31,20 +31,17 @@ _SHIFT = (
     + [6, 10, 15, 21] * 4
 )
 
-# T[i] = floor(2^32 * abs(sin(i))), i = 1..64; góc tính theo radian.
 _K = [int(abs(math.sin(i + 1)) * (1 << 32)) & _MASK32 for i in range(64)]
 
 _INITIAL_STATE = (0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476)
 
 
 def _left_rotate(value: int, amount: int) -> int:
-    """Xoay trái một giá trị trong phạm vi 32 bit."""
     value &= _MASK32
     return ((value << amount) | (value >> (32 - amount))) & _MASK32
 
 
 def _pad(message: bytes) -> bytes:
-    """Đệm thông điệp: bit 1, các bit 0, rồi độ dài ban đầu 64 bit little-endian."""
     original_length_bits = (len(message) * 8) & 0xFFFFFFFFFFFFFFFF
     padded = bytearray(message)
     padded.append(0x80)
