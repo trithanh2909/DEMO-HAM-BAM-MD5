@@ -34,7 +34,6 @@ _SHIFT = (
 # T[i] = floor(2^32 * abs(sin(i))), i = 1..64; góc tính theo radian.
 _K = [int(abs(math.sin(i + 1)) * (1 << 32)) & _MASK32 for i in range(64)]
 
-# Bốn từ trạng thái khởi tạo theo RFC 1321.
 _INITIAL_STATE = (0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476)
 
 
