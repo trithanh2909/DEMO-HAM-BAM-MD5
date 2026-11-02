@@ -58,7 +58,7 @@ def _pad(message: bytes) -> bytes:
 def md5(
     message: bytes,
     *,
-    trace: boo1 = False, 
+    trace: bool = False, 
 ) -> str | tuple[str, list[dict[str, Any]]]:
     if not isinstance(message, (bytes, bytearray, memoryview)):
         raise TypeError("md5() cần bytes; hãy mã hóa văn bản bằng UTF-8 trước.")
@@ -70,6 +70,7 @@ def md5(
     for block_index in range(0, len(data), 64):
         block = data[block_index:block_index + 64]
         words = struct.unpack("<16I", block)
+        a, b, c, d = a0, b0, c0, d0
         
         for i in range(64):
             if i < 16:
@@ -83,22 +84,23 @@ def md5(
             elif i < 48:
                 function = b ^ c ^ d
                 word_index = (3 * i + 5) % 16
-                round_number = 4
+                round_number = 3
             else:
                 function = c ^ (b | (~d))
                 word_index = (7 * i) % 16
                 round_number = 4
                 
-                mixed = (a + function + _K[i] + words[word_index]) & _MASK32
-                rotated = _left_rotate(mixed, _SHIFT[i]) 
-                old_b, old_c, old_d = b, c, d
-                a = old_d
-                b = (old_b + rotated) & _MASK32
-                c = old_b
-                d = old_c
+            mixed = (a + function + _K[i] + words[word_index]) & _MASK32
+            rotated = _left_rotate(mixed, _SHIFT[i]) 
+                
+            old_b, old_c, old_d = b, c, d
+            a = old_d
+            b = (old_b + rotated) & _MASK32
+            c = old_b
+            d = old_c
                 
             if trace:
-                trace_row.append(
+                trace_rows.append(
                     {
                         "block": block_index // 64 + 1,
                         "step": i + 1,
