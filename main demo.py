@@ -129,12 +129,10 @@ def md5_text(text: str) -> str:
 # ============================================================================
 # PHẦN 3. TÍNH MD5 CHO TỆP VÀ KIỂM TRA TÍNH TOÀN VẸN
 # ============================================================================
-=
-
 def hash_file(path: str | Path) -> str:
     file_path = Path(path).expanduser()
     data = file_path.read_bytes()
-    return str (md5(data))
+    return str(md5(data))
 
 def verify_file(path: str | Path, expected_digest: str) -> tuple[bool, str]:
     actual = hash_file(path)
