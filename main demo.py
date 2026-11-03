@@ -129,11 +129,20 @@ def md5_text(text: str) -> str:
 # ============================================================================
 # PHẦN 3. TÍNH MD5 CHO TỆP VÀ KIỂM TRA TÍNH TOÀN VẸN
 # ============================================================================
+def hash_file(path: str | Path) -> str:
+    file_path = Path(path).expanduser()
+    data = file_path.read_bytes()
+    return str(md5(data))
 
-
-
-
-
+def verify_file(path: str | Path, expected_digest: str) -> tuple[bool, str]:
+    actual = hash_file(path)
+    normalized = expected_digest.strip().lower()
+    is_valid_digest = len(normalized) == 32 and all(
+        char in "0123456789abcdef" for char in normalized
+    )
+    matched = is_valid_digest and hmac.compare_digest(actual, normalized)
+    return matched, actual
+    
 # ============================================================================
 # PHẦN 4. TỰ KIỂM THỬ — GIỮ TEST CƠ BẢN TRONG MAIN.PY
 # ============================================================================
