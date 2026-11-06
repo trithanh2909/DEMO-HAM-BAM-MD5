@@ -47,7 +47,7 @@ Menu cung cấp các lựa chọn:
 Trong menu, chọn `5`. Hoặc chạy chương trình không tương tác bằng lệnh:
 
 ```
-python main.py
+python main demo.py
 ```
 
 Sau đó nhập `5` và kiểm tra kết quả ở cuối. Bộ tự kiểm thử hiện bao gồm:
