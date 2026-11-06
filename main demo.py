@@ -189,7 +189,7 @@ def self_test() -> bool:
     check("Văn bản tiếng Việt UTF-8", unicode_ok)   
 
      try:
-        md5("abc")  # type: ignore[arg-type]
+        md5("abc")
         type_ok = False
     except TypeError:
         type_ok = True
@@ -220,8 +220,6 @@ def self_test() -> bool:
     print(f"\nKết quả: {passed}/{total} kiểm tra đạt.")
     print("OK" if passed == total else "CÓ KIỂM TRA THẤT BẠI")
     return passed == total    
-
-
 
 # ============================================================================
 # PHẦN 5. GIAO DIỆN DÒNG LỆNH (CLI) ĐỂ DEMO TRÊN CMD
