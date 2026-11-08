@@ -30,7 +30,7 @@ Trên Windows, nếu lệnh `python` không hoạt động nhưng `py` có sẵn
 Mở terminal tại thư mục chứa `main.py` và `README.md`, sau đó chạy:
 
 ```
-python main.py
+python main demo.py
 ```
 
 Menu cung cấp các lựa chọn:
