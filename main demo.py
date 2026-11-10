@@ -224,6 +224,91 @@ def self_test() -> bool:
 # ============================================================================
 # PHẦN 5. GIAO DIỆN DÒNG LỆNH (CLI) ĐỂ DEMO TRÊN CMD
 # ============================================================================
+def ask_path() -> Path | None:
+    raw = input("Nhập đường dẫn tệp (có thể kéo-thả tệp vào CMD): ").strip().strip('"')
+    path = Path(raw).expanduser()
+    if not path.is_file():
+        print("Không tìm thấy tệp. Hãy kiểm tra đường dẫn rồi thử lại.")
+        return None
+    return path
 
 
+def show_trace() -> None:
+    digest, rows = md5(b"abc", trace=True)
+    print("\nTrace MD5 cho thông điệp 'abc' (hiển thị 8 bước đầu).")
+    print("Bước | Vòng | Chỉ số từ | A        | B        | C        | D")
+    for row in rows[:8]:
+        print(
+            f"{row['step']:>4} | {row['round']:>4} | {row['word_index']:>9} | "
+            f"{row['A']} | {row['B']} | {row['C']} | {row['D']}"
+        )
+    print(f"MD5('abc') = {digest}")
+
+
+def menu() -> None:
+    while True:
+        print("\n========== DEMO HÀM BĂM MD5 ==========")
+        print("1. Tính MD5 cho văn bản")
+        print("2. Tính MD5 cho một tệp")
+        print("3. Kiểm tra tính toàn vẹn của tệp")
+        print("4. Hiển thị trace MD5('abc')")
+        print("5. Chạy bộ tự kiểm thử")
+        print("0. Thoát")
+        choice = input("Chọn chức năng: ").strip()
+
+        if choice == "1":
+            text = input("Nhập văn bản: ")
+            print(f"Độ dài UTF-8: {len(text.encode('utf-8'))} byte")
+            print(f"MD5 = {md5_text(text)}")
+
+        elif choice == "2":
+            path = ask_path()
+            if path:
+                try:
+                    print(f"Tệp: {path}")
+                    print(f"Kích thước: {path.stat().st_size} byte")
+                    print(f"MD5 = {hash_file(path)}")
+                except OSError as error:
+                    print(f"Không thể đọc tệp: {error}")
+
+        elif choice == "3":
+            path = ask_path()
+            if path:
+                expected = input("Nhập digest MD5 tham chiếu (32 ký tự hex): ").strip()
+                try:
+                    matched, actual = verify_file(path, expected)
+                    print(f"MD5 tính được: {actual}")
+                    print(
+                        "KẾT QUẢ: KHỚP."
+                        if matched
+                        else "KẾT QUẢ: KHÔNG KHỚP hoặc digest tham chiếu không hợp lệ."
+                    )
+                    print("Lưu ý: MD5 không bảo đảm chống giả mạo trước đối thủ chủ động.")
+                except OSError as error:
+                    print(f"Không thể đọc tệp: {error}")
+
+        elif choice == "4":
+            show_trace()
+
+        elif choice == "5":
+            self_test()
+
+        elif choice == "0":
+            print("Kết thúc demo.")
+            return
+
+        else:
+            print("Lựa chọn không hợp lệ. Hãy nhập 1, 2, 3, 4, 5 hoặc 0.")
+
+
+def main() -> None:
+    menu()
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nĐã dừng chương trình.")
+        sys.exit(130)
 
